@@ -1,0 +1,308 @@
+
+@inproceedings{Kuth25RTG,
+booktitle = {High-Performance Graphics - Symposium Papers},
+editor = {Knoll, Aaron and Peters, Christoph},
+title = {{Real-Time GPU Tree Generation}},
+author = {Kuth, Bastian and Oberberger, Max and Faber, Carsten and Pfeifer, Pirmin and Tabaei, Seyedmasih and Baumeister, Dominik and Meyer, Quirin},
+year = {2025},
+publisher = {The Eurographics Association},
+ISSN = {2079-8687},
+ISBN = {978-3-03868-291-2},
+DOI = {10.2312/hpg.20251168},
+abstract = {Trees for real-time media are typically created using procedural algorithms and then baked to a polygon format, requiring large amounts of memory. We propose a novel procedural system and model for generating and rendering realistic trees and similar vegetation specifically tailored to run in real-time on GPUs. By using GPU work graphs with mesh nodes, we render gigabytes-worth of tree geometry from kilobytes of generation code every frame exclusively on the GPU. Contrary to prior work, our method combines instant in-engine artist authoring, continuous frame-specific level of detail and tessellation, highly detailed animation, and seasonal details like blossoms, fruits, and snow. Generating the unique tree geometries of our teaser test scene and rendering them to the G-buffer takes 3.13 ms on an AMD Radeon RX 7900 XTX.}
+}
+
+@article{Cigolle14SER,
+   author  = {Zina H. Cigolle and Sam Donow and Daniel Evangelakos and Michael Mara and Morgan McGuire and Quirin Meyer},
+   title   = {A Survey of Efficient Representations for Independent Unit Vectors},
+   year    = {2014},
+   month   = {April},
+   day     = {17},
+   journal = {Journal of Computer Graphics Techniques (JCGT)},
+   volume  = {3},
+   number  = {2},
+   pages   = {1--30},
+   url     = {http://jcgt.org/published/0003/02/01/},
+   issn    = {2331-7418},
+   abstract = {The bandwidth cost and memory footprint of vector buffers are limiting factors for GPU rendering in many applications. This article surveys time- and space-efficient representations for the important case of non-register, in-core, statistically independent unit vectors, with emphasis on GPU encoding and decoding. These representations are appropriate for unit vectors in a geometry buffer or attribute stream--where no correlation between adjacent vectors is easily available--or for those in a normal map where quality higher than that of DXN is required. We do not address out-of-core and register storage vectors because they favor minimum-space and maximum-speed alternatives, respectively.
+
+We evaluate precision and its qualitative impact across these techniques and give CPU reference implementations. For those methods with good quality and reasonable performance, we provide optimized GLSL GPU implementations of encoding and decoding.}
+}          
+
+
+@article{Meyer10OFN,
+author = {Meyer, Quirin and Süßmuth, Jochen and Sußner, Gerd and Stamminger, Marc and Greiner, Günther},
+title = {On Floating-Point Normal Vectors},
+journal = {Computer Graphics Forum},
+volume = {29},
+number = {4},
+pages = {1405-1409},
+keywords = {Computer Graphics I.3.6: Methodology and Techniques—Graphics data structures and data types},
+doi = {https://doi.org/10.1111/j.1467-8659.2010.01737.x},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8659.2010.01737.x},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8659.2010.01737.x},
+abstract = {Abstract In this paper we analyze normal vector representations. We derive the error of the most widely used representation, namely 3D floating-point normal vectors. Based on this analysis, we show that, in theory, the discretization error inherent to single precision floating-point normals can be achieved by 250.2 uniformly distributed normals, addressable by 51 bits. We review common sphere parameterizations and show that octahedron normal vectors perform best: they are fast and stable to compute, have a controllable error, and require only 1 bit more than the theoretical optimal discretization with the same error.},
+year = {2010}
+}
+
+
+@article{Suessmuth10SRB,
+journal = {Computer Graphics Forum},
+title = {{Surface Reconstruction Based on Hierarchical Floating Radial Basis Functions}},
+author = {Süßmuth, Jochen and Meyer, Quirin and Greiner, Günther},
+year = {2010},
+publisher = {The Eurographics Association and Blackwell Publishing Ltd},
+ISSN = {1467-8659},
+DOI = {10.1111/j.1467-8659.2010.01653.x},
+url = {https://diglib.eg.org/items/a29ab8c4-ad30-4b24-85e0-75602a8b1ea4},
+abstract = {In this paper we address the problem of optimal centre placement for scattered data approximation using radial basis functions (RBFs) by introducing the concept of floating centres. Given an initial least-squares solution, we optimize the positions and the weights of the RBF centres by minimizing a non-linear error function. By optimizing the centre positions, we obtain better approximations with a lower number of centres, which improves the numerical stability of the fitting procedure. We combine the non-linear RBF fitting with a hierarchical domain decomposition technique. This provides a powerful tool for surface reconstruction from oriented point samples. By directly incorporating point normal vectors into the optimization process, we avoid the use of off-surface points which results in less computational overhead and reduces undesired surface artefacts. We demonstrate that the proposed surface reconstruction technique is as robust as recent methods, which compute the indicator function of the solid described by the point samples. In contrast to indicator function based methods, our method computes a global distance field that can directly be used for shape registration.},
+}
+
+
+@INPROCEEDINGS{Schoenfeld103SC,
+  author={Meyer, Quirin and Schönfeld, Fabian and Stamminger, Marc and Wanka, Rolf},
+  booktitle={2010 International Conference on High Performance Computing & Simulation}, 
+  title={3-SAT on CUDA: Towards a Massively Parallel SAT Solver}, 
+  year={2010},
+  volume={},
+  number={},
+  pages={306-313},
+  keywords={Graphics processing unit;Memory management;Pipelines;Program processors;Multicore processing;GPGPU;thread level parallelism;load balancing and sharing;random 3-SAT},
+  doi={10.1109/HPCS.2010.5547116},
+  abstract ={This work presents the design and implementation of a massively parallel 3-SAT solver, specifically targeting random problem instances. Our approach is deterministic and features very little communication overhead and basically no load-balancing cost at all. In the context of most current parallel SAT solvers running only on a handful of cores, we implemented our solver on Nvidia's CUDA platform, utilizing more than 200 parallel streaming processors, and employing several millions of threads to work through single problem instances. As most common sequential solver techniques had to be discarded, our approach is additionally supported by a new set of global heuristics, designed specifically to be easily exploited by the underlying thread parallelism.},
+  url={https://ieeexplore.ieee.org/document/5547116}
+  }
+
+
+
+
+@inproceedings{Eisenacher09RVR,
+author = {Eisenacher, Christian and Meyer, Quirin and Loop, Charles},
+title = {Real-time View-dependent Rendering of Parametric Surfaces},
+year = {2009},
+isbn = {9781605584294},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1507149.1507172},
+doi = {10.1145/1507149.1507172},
+abstract = {We propose a view-dependent adaptive subdivision algorithm for rendering parametric surfaces on parallel hardware. Our framework allows us to bound the screen space error of a piecewise linear approximation. We naturally assign more primitives to curved areas while keeping quads large for flatter parts of the model and avoid cracks resulting from the polygonal approximation of non-uniform patch subdivision. The overall algorithm is simple, fits current GPUs extremely well, and is surprisingly fast while producing little to no artifacts.},
+booktitle = {Proceedings of the 2009 Symposium on Interactive 3D Graphics and Games},
+pages = {137-143},
+numpages = {7},
+keywords = {real-time rendering, adaptive surface rendering, GPGPU},
+location = {Boston, Massachusetts},
+series = {I3D '09}
+}
+
+@article{Selgrad15FMS,
+author = {Selgrad, Kai and Dachsbacher, Carsten and Meyer, Quirin and Stamminger, Meyer},
+title = {Filtering Multi-Layer Shadow Maps for Accurate Soft Shadows},
+journal = {Computer Graphics Forum},
+volume = {34},
+number = {1},
+issn = {1467-8659},
+url = {https://diglib.eg.org/items/27878d02-33d2-430e-bdb8-60a38df7ca65},
+doi = {10.1111/cgf.12506},
+pages = {205--215},
+year = {2015},
+abstract = {In this paper, we introduce a novel technique for pre‐filtering multi‐layer shadow maps. The occluders in the scene are stored as variable‐length lists of fragments for each texel. We show how this representation can be filtered by progressively merging these lists. In contrast to previous pre‐filtering techniques, our method better captures the distribution of depth values, resulting in a much higher shadow quality for overlapping occluders and occluders with different depths. The pre‐filtered maps are generated and evaluated directly on the GPU, and provide efficient queries for shadow tests with arbitrary filter sizes. Accurate soft shadows are rendered in real‐time even for complex scenes and difficult setups. Our results demonstrate that our pre‐filtered maps are general and particularly scalable.In this paper, we introduce a novel technique for pre‐filtering multi‐layer shadow maps. The occluders in the scene are stored as variable‐length lists of fragments for each texel. We show how this representation can be filtered by progressively merging these lists. In contrast to previous pre‐filtering techniques, our method better captures the distribution of depth values, resulting in a much higher shadow quality for overlapping occluders and occluders with different depths. The pre‐filtered maps are generated and evaluated directly on the GPU, and provide efficient queries for shadow tests with arbitrary filter sizes.}
+}
+
+@ARTICLE{Schaefer13MAH,
+  author={Schäfer, Henry and Prus, Magdalena and Meyer, Quirin and Süßmuth, Jochen and Stamminger, Marc},
+  journal={IEEE Transactions on Visualization and Computer Graphics}, 
+  title={Multiresolution Attributes for Hardware Tessellated Objects}, 
+  year={2013},
+  volume={19},
+  number={9},
+  pages={1488-1498},
+  keywords={Face;Indexes;Hardware;Image color analysis;Rendering (computer graphics);Interpolation;Pipelines;Signal-dependent storage;hardware tessellation;displacement mapping},
+  doi={10.1109/TVCG.2013.44},
+  url = {https://ieeexplore.ieee.org/document/6470610?arnumber=6470610},
+  abstract={Hardware tessellation is one of the latest GPU features. Triangle or quad meshes are tessellated on-the-fly, where the tessellation level is chosen adaptively in a separate shader. The hardware tessellator only generates topology; attributes such as positions or texture coordinates of the newly generated vertices are determined in a domain shader. Typical applications of hardware tessellation are view dependent tessellation of parametric surfaces and displacement mapping. Often, the attributes for the newly generated vertices are stored in textures, which requires uv unwrapping, chartification, and atlas generation of the input meshâa process that is time consuming and often requires manual intervention. In this paper, we present an alternative representation that directly stores optimized attribute values for typical hardware tessellation patterns and simply assigns these attributes to the generated vertices at render time. Using a multilevel fitting approach, the attribute values are optimized for several resolutions. Thereby, we require no parameterization, save memory by adapting the density of the samples to the content, and avoid discontinuities by construction. Our representation is optimally suited for displacement mapping: it automatically generates seamless, view-dependent displacement mapped models. The multilevel fitting approach generates better low-resolution displacement maps than simple downfiltering. By properly blending levels, we avoid artifacts such as popping or swimming surfaces. We also show other possible applications such as signal-optimized texturing or light baking. Our representation can be evaluated in a pixel shader, resulting in signal adaptive, parameterization-free texturing, comparable to PTex or Mesh Colors. Performance evaluation shows that our representation is on par with standard texture mapping and can be updated in real time, allowing for application such as interactive sculpting.}
+}
+
+
+@inproceedings{Meyer09DPH,
+booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
+editor = {Kurt Debattista and Daniel Weiskopf and Joao Comba},
+title = {{Data-Parallel Hierarchical Link Creation for Radiosity}},
+author = {Meyer, Quirin and Eisenacher, Christian and Stamminger, Marc and Dachsbacher, Carsten},
+year = {2009},
+publisher = {The Eurographics Association},
+ISSN = {1727-348X},
+ISBN = {978-3-905674-15-6},
+DOI = {10.2312/EGPGV/EGPGV09/065-070},
+url = {https://diglib.eg.org/items/82d9db63-35eb-43af-be06-bf7d98116932},
+abstract = {The efficient simulation of mutual light exchange for radiosity-like methods has been demonstrated on GPUs. However, those approaches require a suitable set of links and hierarchical data structures, prepared in an expensive preprocessing step. We present a fast, data-parallel method to create links and a compact tree of patches. We demonstrate our approach for Antiradiance and Implicit Visibility. Our algorithm is able to create up to 50 M links per second on an Nvidia GTX 260, allowing fully dynamic scenes at interactive frame rates.}
+}
+
+@inproceedings{Schaefer12MAT,
+author = {Sch\"{a}fer, Henry and Prus, Magdalena and Meyer, Quirin and S\"{u}\ss{}muth, Jochen and Stamminger, Marc},
+title = {Multiresolution Attributes for Tessellated Meshes},
+year = {2012},
+isbn = {9781450311946},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2159616.2159645},
+doi = {10.1145/2159616.2159645},
+abstract = {We present a novel representation for storing sub-triangle signals, such as colors, normals, or displacements directly with the triangle mesh. Signal samples are stored as guided by hardware-tessellation patterns. Thus, we can directly render from our representation by assigning signal samples to attributes of vertices generated by the hardware tessellator.Contrary to texture mapping, our approach does not require any atlas generation, chartification, or uv-unwrapping. Thus, it does not suffer from texture-related artifacts, such as discontinuities across chart boundaries or distortion. Moreover, our approach allows specifying the optimal sampling rate adaptively on a per triangle basis, resulting in significant memory savings for most signal types.We propose a signal optimal approach for converting arbitrary signals, including existing assets with textures or mesh colors, into our representation. Further, we provide efficient algorithms for mip-mapping, bi- and tri-linear interpolation directly in our representation. Our approach is optimally suited for displacement mapping: it automatically generates crack-free, view-dependent displacement mapped models enabling continuous level-of-detail.},
+booktitle = {Proceedings of the ACM SIGGRAPH Symposium on Interactive 3D Graphics and Games},
+pages = {175–182},
+numpages = {8},
+keywords = {displacement mapping, signal dependent storage, tessellation},
+location = {Costa Mesa, California},
+series = {I3D '12}
+}
+
+@article{Meyer12DPD,
+author = {Meyer, Quirin and Keinert, Benjamin and Sußner, Gerd and Stamminger, Marc},
+title = {Data-Parallel Decompression of Triangle Mesh Topology},
+journal = {Computer Graphics Forum},
+volume = {31},
+number = {8},
+pages = {2541-2553},
+keywords = {I.3.6 Computer Graphics: Methodology and Techniques—Graphics data structures and data types, I.3.1 Computer Graphics: Hardware Architecture—Parallel processing},
+doi = {https://doi.org/10.1111/j.1467-8659.2012.03221.x},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8659.2012.03221.x},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8659.2012.03221.x},
+abstract = {Abstract We propose a lossless, single-rate triangle mesh topology codec tailored for fast data-parallel GPU decompression. Our compression scheme coherently orders generalized triangle strips in memory. To unpack generalized triangle strips efficiently, we propose a novel parallel and scalable algorithm. We order vertices coherently to further improve our compression scheme. We use a variable bit-length code for additional compression benefits, for which we propose a scalable data-parallel decompression algorithm. For a set of standard benchmark models, we obtain (min: 3.7, med: 4.6, max: 7.6) bits per triangle. Our CUDA decompression requires only about 15\% of the time it takes to render the model even with a simple shader.},
+year = {2012}
+}
+
+
+@inproceedings{Meyer11ALP,
+booktitle = {Vision, Modeling, and Visualization (2011)},
+editor = {Peter Eisert and Joachim Hornegger and Konrad Polthier},
+title = {{Adaptive Level-of-Precision for GPU-Rendering}},
+author = {Meyer, Quirin and Sussner, Gerd and Greiner, Günther and Stamminger, Marc},
+year = {2011},
+publisher = {The Eurographics Association},
+ISBN = {978-3-905673-85-2},
+DOI = {/10.2312/PE/VMV/VMV11/169-176},
+url = {https://diglib.eg.org/items/fa6a6143-ea8f-4dd4-8eae-d40b3e216ad4},
+abstract = {Video memory is a valuable resource that has grown much slower than the rendering power of GPUs over the last years. Today, video memory is often the limiting factor in interactive high-quality rendering applications. The most often used solution to reduce memory consumption is to apply level-of-detail (LOD) methods: only a simplified version of the mesh with less vertices and triangles is kept in memory. In this paper we examine a simple orthogonal compression approach that is mostly neglected: adapting the level-of-precision (LOP) of vertex data. The main idea is to quantize vertex positions according to the current view distance, and adapt precision by adding or removing single bit planes. We provide an analysis of the resulting image error, and show that visual artifacts can be avoided by simply constraining the quantization for critical vertices. Our approach allows both random access on vertex data as well as quickly switching between LOP. In experiments we found that our approach compresses vertex positions by about 70percent on average without loss in rendering performance or image quality.}
+}
+
+@article{Kuth24RPG,
+author = {Kuth, Bastian and Oberberger, Max and Faber, Carsten and Baumeister, Dominik and Chajdas, Matthäus and Meyer, Quirin},
+title = {Real-Time Procedural Generation with GPU Work Graphs},
+year = {2024},
+issue_date = {August 2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {7},
+number = {3},
+url = {https://doi.org/10.1145/3675376},
+doi = {10.1145/3675376},
+abstract = {We present a system for real-time procedural generation that makes use of the novel GPU programming model, work graphs. The nodes of a work graph are shaders, which dynamically generate new workloads for connected nodes. This greatly simplifies the implementation of recursive procedural algorithms on GPUs. Combined with GPU ray tracing and procedural mesh shaders, our system makes use of this graph structure to tackle various common problems of procedural generation. Our system is very easy to implement, requiring no additional data structures from what would already be available in a modern rendering engine. We demonstrate the real-time editing capabilities on representative examples. We augment the scene in the teaser image with 79,710 instances in 3.74 ms on an AMD Radeon RX 7900 XTX.},
+journal = {Proc. ACM Comput. Graph. Interact. Tech.},
+month = aug,
+articleno = {47},
+numpages = {16},
+keywords = {geometry generation, mesh shaders, ray tracing, work graphs}
+}
+
+@InProceedings{Sussner08HQR,
+author="Sußner, Gerd
+and Meyer, Quirin
+and Greiner, Günther",
+editor="Garimella, Rao V.",
+title="High Quality Realtime Tessellation of Trimmed NURBS Surfaces for Interactive Examination of Surface Quality on Car Bodies",
+booktitle="Proceedings of the 17th International Meshing Roundtable",
+year="2008",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="399--414",
+abstract="Virtual interactive examination of the quality of car body surfaces is an important issue in the development process of a car. The method is based on simulating reflection lines using striped environment maps and strong specular highlights. For this purpose high quality meshes are created from the NURBS surfaces. However, the meshes have a fixed resolution, hence a closer examination requires a finer tessellation. In this paper we present a method which allows a view-dependent, arbitrary fine tessellation of trimmed NURBS surfaces at interactive frame rates.",
+isbn="978-3-540-87921-3",
+url={https://link.springer.com/chapter/10.1007/978-3-540-87921-3_24}
+}
+
+
+
+@article{Kuth23EFD,
+journal = {Computer Graphics Forum},
+title = {{Edge-Friend: Fast and Deterministic Catmull-Clark Subdivision Surfaces}},
+author = {Kuth, Bastian and Oberberger, Max and Chajdas, Matthäus and Meyer, Quirin},
+year = {2023},
+publisher = {The Eurographics Association and John Wiley & Sons Ltd.},
+ISSN = {1467-8659},
+DOI = {10.1111/cgf.14863},
+url={https://diglib.eg.org/items/5582004e-fda7-4861-a980-4de5634015db},
+abstract={We present edge-friend, a data structure for quad meshes with access to neighborhood information required for Catmull-Clark subdivision surface refinement. Edge-friend enables efficient real-time subdivision surface rendering. In particular, the resulting algorithm is deterministic, does not require hardware support for atomic floating-point arithmetic, and is optimized for efficient rendering on GPUs. Edge-friend exploits that after one subdivision step, two edges can be uniquely and implicitly assigned to each quad. Additionally, edge-friend is a compact data structure, adding little overhead. Our algorithm is simple to implement in a single compute shader kernel, and requires minimal synchronization which makes it particularly suited for asynchronous execution. We easily extend our kernel to support relevant Catmull-Clark subdivision surface features, including semi-smooth creases, boundaries, animation and attribute interpolation. In case of topology changes, our data structure requires little preprocessing, making it amendable for a variety of applications, including real-time editing and animations. Our method can process and render billions of triangles per second on modern GPUs. For a sample mesh, our algorithm generates and renders 2.9 million triangles in 0.58ms on an AMD Radeon RX 7900 XTX GPU.},
+}
+
+@inproceedings{Kuth21VBA,
+author = {Kuth, Bastian and Meyer, Quirin},
+title = {Vertex-Blend Attribute Compression},
+year = {2022},
+publisher = {Eurographics Association},
+address = {Goslar, DEU},
+url = {https://doi.org/10.2312/hpg.20211282},
+doi = {10.2312/hpg.20211282},
+abstract = {Skeleton-based animations require per-vertex attributes called vertex-blend attributes. They consist of a weight tuple and a bone index tuple. With meshes becoming more complex, vertex-blend attributes call for compression. However, no technique exists that exploits their special properties. To this end, we propose a novel and optimal weight compression method called Optimal Simplex Sampling and a novel bone index compression. For our test models, we compress bone index tuples between 2.3:1 and 3.5:1 and weight tuples between 1.6:1 and 2.5:1 while being visually lossless. We show that our representations can speed rendering and reduces GPU memory requirements over uncompressed representations with a similar error. Further, our representations compress well with general-purpose codecs making them suitable for offline-storage and streaming.},
+booktitle = {Proceedings of the Conference on High-Performance Graphics},
+pages = {43-52},
+numpages = {10},
+series = {HPG '21},
+}
+
+@article{Peters22PCV,
+author = {Peters, Christoph and Kuth, Bastian and Meyer, Quirin},
+title = {Permutation Coding for Vertex-Blend Attribute Compression},
+year = {2022},
+issue_date = {May 2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {5},
+number = {1},
+url = {https://doi.org/10.1145/3522607},
+doi = {10.1145/3522607},
+abstract = {Compression of vertex attributes is crucial to keep bandwidth requirements in real-time rendering low. We present a method that encodes any given number of blend attributes for skinning at a fixed bit rate while keeping the worst-case error small. Our method exploits that the blend weights are sorted. With this knowledge, no information is lost when the weights get shuffled. Our permutation coding thus encodes additional data, e.g. about bone indices, into the order of the weights. We also transform the weights linearly to ensure full coverage of the representable domain. Through a thorough error analysis, we arrive at a nearly optimal quantization scheme. Our method is fast enough to decode blend attributes in a vertex shader and also to encode them at runtime, e.g. in a compute shader. Our open source implementation supports up to 13 weights in up to 64 bits.},
+journal = {Proc. ACM Comput. Graph. Interact. Tech.},
+month = may,
+articleno = {5},
+numpages = {16},
+keywords = {vertex buffer compression, vertex blend attribute compression, tetrahedron, skinning, simplex, permutation coding, linear vertex blend animation, bone weights, bone indices}
+}
+
+
+@inproceedings{Kuth24TPM,
+booktitle = {Vision, Modeling, and Visualization},
+editor = {Linsen, Lars and Thies, Justus},
+title = {{Towards Practical Meshlet Compression}},
+author = {Kuth, Bastian and Oberberger, Max and Kawala, Felix and Reitter, Sander and Michel, Sebastian and Chajdas, Matthäus and Meyer, Quirin},
+year = {2024},
+publisher = {The Eurographics Association},
+ISBN = {978-3-03868-247-9},
+DOI = {10.2312/vmv.20241204},
+abstract={We propose a codec specifically designed for meshlet compression, optimized for rapid data-parallel GPU decompression within a mesh shader. Our compression strategy orders triangles in optimal generalized triangle strips (GTSs), which we generate by formulating the creation as a mixed integer linear program (MILP). Our method achieves index buffer compression rates of 16:1 compared to the vertex pipeline and crack-free vertex attribute quantization based on user preference. The 15.5 million triangles of our teaser image decompress and render in 0.59 ms on an AMD Radeon RX 7900 XTX.},
+url={https://diglib.eg.org/items/423fd6b9-d226-4e82-92a0-4856bc064bdf}
+}
+
+
+@inproceedings{Meyer25PDT,
+booktitle = {Eurographics 2025 - Short Papers},
+editor = {Ceylan, Duygu and Li, Tzu-Mao},
+title = {{Parallel Dense-Geometry-Format Topology Decompression}},
+author = {Meyer, Quirin and Barczak, Joshua and Reitter, Sander and Benthin, Carsten},
+year = {2025},
+publisher = {The Eurographics Association},
+ISSN = {1017-4656},
+ISBN = {978-3-03868-268-4},
+DOI = {10.2312/egs.20251050},
+abstract = {Dense Geometry Format (DGF) [BBM24] is a hardware-friendly representation for compressed triangle meshes specifically designed to support GPU hardware ray tracing. It decomposes a mesh into meshlets, i.e., small meshes with up to 64 positions, triangles, primitive indices, and opacity values, in a 128-byte block. However, accessing a triangle requires a slow sequential decompression algorithm with O(T) steps, where T is the number of triangles in a DGF block. We propose a novel parallel algorithm with O(logT) steps for arbitrary T. For DGF, where T ≤ 64, we transform our algorithm to allow O(1) access. We believe that our algorithm is suitable for hardware implementations. With our algorithm, a custom intersection shader outperforms the existing serial decompression method. Further, our mesh shader implementation achieves competitive rasterization performance with the vertex pipeline. Finally, we show how our method may parallelize other topology decompression schemes.},
+url={https://diglib.eg.org/items/1ed469e0-1923-46cc-91d6-b137b8aa8f8e},
+}
+
+@phdthesis{Meyer12RTG,
+  author       = {Quirin Meyer},
+  title        = {Real-Time Geometry Decompression on Graphics Hardware},
+  school       = {Friedrich-Alexander-Universität Erlangen-Nürnberg},
+  publisher    = {Dr. Hut Verlag},
+  year         = {2012},
+  month        = aug,  
+  type         = {PhD thesis},
+  abstract      = {Real-Time Computer Graphics focuses on generating images fast enough to cause the illusion of a continuous motion. It is used in science, engineering, computer games, image processing, and design. Special purpose graphics hardware, a so-called graphics processing unit (GPU), accelerates the image generation process substantially. Therefore, GPUs have become indispensable tools for Real-Time Computer Graphics. The purpose of GPUs is to create two-dimensional (2D) images from threedimensional (3D) geometry. Thereby, 3D geometry resides in GPU memory. However, the ever increasing demand for more realistic images constantly pushes geometry memory consumption. This makes GPU memory a limiting resource in many Real-Time Computer Graphics applications. An effective way of getting more geometry into GPU memory is to compress geometry.In this thesis, we introduce novel algorithms for compressing and decompressing geometry. We propose methods to compress and decompress 3D positions, 3D unit vectors, and topology of triangle meshes. Thereby, we obtain compression ratios from 2:1 to 26:1. We focus on exploiting the high degree of parallelism available on GPUs for decompression. This allows our decompression techniques to run in real-time and impact rendering speed only little. At the same time, our techniques achieve high image quality: images, generated from compressed geometry, are visually indistinguishable from images generated from non-compressed geometry. Moreover, our methods are easy to combine with existing rendering techniques. Thereby, a wide range of applications may benefit from our results.}
+}

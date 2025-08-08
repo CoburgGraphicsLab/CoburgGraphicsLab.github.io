@@ -8,7 +8,7 @@ redirect_from:
 ---
 
 I am a Professor for Computer Graphics at [Coburg University of Applied Sciences and Arts](https://www.hs-coburg.de/en/).
-My job in includes
+My job includes
 - teaching: 
   - [Visual Computing Bachelor](https://www.hs-coburg.de/studieren/bachelor/technik-und-informatik/visual-computing/), 
   - [Computer Science Bachelor](https://www.hs-coburg.de/studieren/bachelor/technik-informatik-und-naturwissenschaften/informatik/),

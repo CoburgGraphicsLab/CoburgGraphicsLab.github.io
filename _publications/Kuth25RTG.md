@@ -14,4 +14,6 @@ Trees for real-time media are typically created using procedural algorithms and 
 
 [Preprint](../files/Kuth25RTG.pdf){:target="_blank"}
 
+[Official Version](https://diglib.eg.org/items/93fc78c0-71fa-4511-8564-a7e5268bf27a){:target="_blank"}
+
 [Google Scholar](https://scholar.google.com/scholar?q=Real+Time+GPU+Tree+Generation){:target="_blank"}

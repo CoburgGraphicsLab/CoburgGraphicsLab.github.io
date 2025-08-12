@@ -27,3 +27,9 @@ Sunday, 10 August 2025 2:00pm - 5:15pm PDT, West Building, Rooms 109-110, Vancou
 
 [Cheat Sheet 2 Pages](../files/Kuth25WGC2.pdf){:target="_blank"}
 
+[Work Graph Playground App](https://github.com/GPUOpen-LibrariesAndSDKs/WorkGraphPlayground){:target="_blank"}
+
+## Additional Resources
+
+[Procedural Tree Generation Work Graph Playground Sample](https://github.com/Bloodwyn/gptree){:target="_blank"}
+

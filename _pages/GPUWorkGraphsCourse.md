@@ -33,3 +33,6 @@ Sunday, 10 August 2025 2:00pm - 5:15pm PDT, West Building, Rooms 109-110, Vancou
 
 [Procedural Tree Generation Work Graph Playground Sample](https://github.com/Bloodwyn/gptree){:target="_blank"}
 
+## ACM
+
+[Course at ACM Digital Library](https://dl.acm.org/doi/10.1145/3721241.3734003)

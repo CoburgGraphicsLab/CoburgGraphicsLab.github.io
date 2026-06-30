@@ -30,11 +30,18 @@ location: "Coburg, Germany"
 - Lighting
 - Shading
 
-# Teaching  Goals
+# Teaching Goals
 
 - Learn the fundamentals of rasterization and computer graphics
 - Understand, handle, solve, and explain  typical computer graphics theory problems
 - Write a basic software triangle rasterization 
+
+# Slides
+
+<a href="https://zenodo.org/records/20843656" target="_blank" rel="noopener noreferrer">
+  Power-Point Slides
+</a>
+
 
 # Lab Assignments
 
@@ -110,14 +117,6 @@ For better lighting, we compute the lighting at each pixel.
 ## A10Optimize
 Optimize the speed with OpenMP, SIMD, replace small triangles with points, cull, etc.
 ![OptimizedBunny](../files/CG1/Optimized_Bunny.jpg)
-
-
-# Theory Assignments
-
-# Slides
-
-# Literature
-
 
 # AI Usage
 

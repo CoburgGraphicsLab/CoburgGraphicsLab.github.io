@@ -16,4 +16,4 @@ Meyer, Quirin; Suessmuth, Jochen; Sussner, Gerd; Stamminger, Marc; Greiner, Guen
 ## Downloads
 
 
-<a href='../files/Meyer10OFN-PrePrint.pdf'>Download paper here</a>
+<a href='../files/Meyer10OFN.pdf'>Download paper here</a>

@@ -6,6 +6,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xEEi71nZH94" title="Computer Graphics Lab " frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 I am a Professor for Computer Graphics at [Coburg University of Applied Sciences and Arts](https://www.hs-coburg.de/en/).
 My job includes

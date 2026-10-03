@@ -163,7 +163,7 @@ a:focus-visible{outline:2px solid var(--after);outline-offset:2px}
 <script>
 const TODAY = new Date().toISOString().slice(0,10);
 const V = [
- {id:"eg",  name:"Eurographics 2027 – Full Papers", loc:"Lucca, Italy", kind:"paper", sub:"2026-10-01", dec:"2026-12-18", fin:"2027-02-09", cs:"2027-05-10", ce:"2027-05-14", est:{}, status:"Submitted, under review"},
+ {id:"eg",  name:"Eurographics 2027 – Full Papers", loc:"Lucca, Italy", kind:"paper", sub:"2026-10-01", dec:"2026-12-18", fin:"2027-02-09", cs:"2027-05-10", ce:"2027-05-14", est:{}},
  {id:"star",name:"Eurographics 2027 – STARs", loc:"Lucca, Italy", kind:"small", sub:"2026-10-19", dec:"2026-12-21", fin:"2027-02-19", cs:"2027-05-10", ce:"2027-05-14", est:{}},
  {id:"cvpr",name:"CVPR 2027", loc:"Seattle, USA", kind:"paper", sub:"2026-11-16", dec:"2027-02-25", cs:"2027-06-20", ce:"2027-06-25", est:{}},
  {id:"vrp", name:"IEEE VR 2027 – Posters", loc:"Melbourne, Australia", kind:"small", sub:"2026-12-07", dec:"2027-01-06", cs:"2027-02-27", ce:"2027-03-03", est:{}},
@@ -192,6 +192,7 @@ const V = [
  {id:"spm", name:"SPM 2027 (Solid & Physical Modeling)", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-01-15", dec:"2027-03-15", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
  {id:"smi", name:"SMI 2027 (Shape Modeling International)", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-03-01", dec:"2027-04-20", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
  {id:"igsp",name:"Geometry Summit 2027 – Posters", loc:"Singapore", kind:"small", sub:"2027-05-10", dec:"2027-05-31", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"egs", name:"Eurographics 2027 – Short Papers", loc:"Lucca, Italy", kind:"paper", sub:"2027-01-22", dec:"2027-03-12", cs:"2027-05-10", ce:"2027-05-14", est:{sub:1,dec:1}},
  {id:"eg28",name:"Eurographics 2028 – Full Papers", loc:"Zaragoza, Spain", kind:"paper", sub:"2027-10-01", dec:"2027-12-17", fin:"2028-02-08", cs:"2028-05-08", ce:"2028-05-12", est:{sub:1,dec:1,conf:1}},
 ];
 V.sort((a,b)=>a.sub.localeCompare(b.sub));
@@ -207,15 +208,16 @@ const URLS = {
  vmv:"https://www.gcpr-vmv.de/", w3d:"https://web3d.siggraph.org/", "3dv":"https://3dvconf.github.io/",
  vr28:"https://ieeevr.org/", griv:"https://confcal.vrvis.at/conferences/grapp/",
  eg28:"https://www.eg.org/wp/eurographics-annual-conference/",
- gmp:"https://gmp-conference-2027.github.io/gmp2027/", spm:"https://gmp-conference-2027.github.io/gmp2027/", smi:"https://gmp-conference-2027.github.io/gmp2027/", igsp:"https://gmp-conference-2027.github.io/gmp2027/"
+ egs:"https://eg2027.isti.cnr.it/", gmp:"https://gmp-conference-2027.github.io/gmp2027/", spm:"https://gmp-conference-2027.github.io/gmp2027/", smi:"https://gmp-conference-2027.github.io/gmp2027/", igsp:"https://gmp-conference-2027.github.io/gmp2027/"
 };
 V.forEach(v => v.url = URLS[v.id]);
-const CONT = {eg:"eu",star:"eu",cvpr:"na",vrp:"oc",ev:"eu",i3d:"tba",gi:"na",sig:"na",sgp1:"as",sgp2:"as",
+const CONT = {eg:"eu",egs:"eu",star:"eu",cvpr:"na",vrp:"oc",ev:"eu",i3d:"tba",gi:"na",sig:"na",sgp1:"as",sgp2:"as",
  pgv:"eu",wscg:"eu",cgi:"oc",ismar:"tba",vg:"eu",hpg:"eu",sca:"tba",egsr:"eu",sa:"as",pg:"tba",vmv:"eu",
  w3d:"tba","3dv":"tba",vr28:"tba",griv:"tba",eg28:"eu",gmp:"as",spm:"as",smi:"as",igsp:"as"};
 V.forEach(v => v.cont = CONT[v.id] || "tba");
 const KW = {
  eg:["2027 call",["Computer graphics (all areas)","Novel methods and algorithms","Datasets and benchmarks","Perceptual and experimental studies","Rendering","Geometry processing","Animation and simulation","Generative AI and deep learning for graphics"]],
+ egs:["2025–26 calls",["4 pages incl. references","Rendering","Modeling","Visualization","Animation and simulation","Virtual reality","Computer vision","CAD and digital fabrication","Imaging and computational photography"]],
  star:["2027 call",["State-of-the-art surveys","Taxonomies","Critical comparison of methods","Research gaps","Cross-disciplinary topics"]],
  cvpr:["Typical scope",["Computer vision","3D reconstruction","Neural rendering","Generative models","Representation learning"]],
  vrp:["2027 call",["Virtual reality","Augmented and mixed reality","3D user interfaces","Work in progress","Systems and applications"]],
@@ -304,7 +306,7 @@ function render(){
     t += `<div class="tag" style="left:${x(v.cs)}px">${v.loc}</div>`;
     rows += `<div class="row rel-${r==='sel'?'x':r} ${r==='sel'?'sel':''}">
       <div class="row-label" tabindex="0" role="button" data-id="${v.id}" aria-pressed="${r==='sel'}">
-        <b>${v.name}</b><small>${v.status ? v.status : (e.sub ? "Estimated dates" : "Confirmed dates")}</small>
+        <b>${v.name}</b><small>${days(TODAY,v.sub)<0 ? "Deadline passed" : (e.sub ? "Estimated dates" : "Confirmed dates")}</small>
       </div>
       <div class="track" style="width:${W}px">${t}</div></div>`;
   }

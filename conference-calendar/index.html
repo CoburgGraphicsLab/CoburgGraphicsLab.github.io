@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Conference calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F6F8; --surface:#FFFFFF; --ink:#18202E; --muted:#5D6878; --line:#DDE2E8;
+  --review:#2F5D8C; --conf:#A23B72; --eu:#E0A100; --na:#D6336C; --as:#12A4B8; --oc:#8A5A2B; --tba:#9AA3AE; --before:#1F8A70; --after:#6D4AFF; --today:#C0392B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#12161D; --surface:#1A1F28; --ink:#E7EBF0; --muted:#9AA4B2; --line:#2B323D;
+  --review:#6FA0D8; --conf:#E07AB0; --eu:#F2C14E; --na:#F06595; --as:#3BC9DB; --oc:#C08A55; --tba:#6B7480; --before:#3CC4A0; --after:#9C86FF; --today:#FF6B5B;
+}}
+:root[data-theme="dark"]{
+  --paper:#12161D; --surface:#1A1F28; --ink:#E7EBF0; --muted:#9AA4B2; --line:#2B323D;
+  --review:#6FA0D8; --conf:#E07AB0; --eu:#F2C14E; --na:#F06595; --as:#3BC9DB; --oc:#C08A55; --tba:#6B7480; --before:#3CC4A0; --after:#9C86FF; --today:#FF6B5B;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 48px}
+h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0 0 20px;max-width:70ch}
+.controls{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;margin-bottom:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;font-size:14px;border:0;background:none;color:var(--ink);padding:7px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg button:focus-visible,.row-label:focus-visible{outline:2px solid var(--after);outline-offset:2px}
+label.chk{display:inline-flex;gap:6px;align-items:center;font-size:14px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin-bottom:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:22px;height:10px;border-radius:2px;display:inline-block}
+.sw.conf-sw{background:var(--review)}
+.sw.est-sw{background:repeating-linear-gradient(135deg,var(--review) 0 3px,transparent 3px 6px);outline:1px dashed var(--review)}
+.sw.cf{width:10px;height:10px;border-radius:50%;background:var(--conf)}
+.sw.dot{width:12px;height:12px;border-radius:50%}
+.sw.b{background:var(--before)} .sw.a{background:var(--after)}
+.chart{overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;max-height:78vh}
+.grid{position:relative}
+.hdr{position:sticky;top:0;z-index:4;display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
+.corner{position:sticky;left:0;z-index:5;background:var(--surface);flex:0 0 var(--lw);border-right:1px solid var(--line);padding:8px 12px;font-size:12px;color:var(--muted)}
+.months{position:relative;height:34px}
+.month{position:absolute;top:0;height:100%;font-size:12px;color:var(--muted);padding:9px 6px;border-left:1px solid var(--line);white-space:nowrap}
+.row{display:flex;border-bottom:1px solid var(--line);min-height:46px}
+.row:last-child{border-bottom:0}
+.row-label{position:sticky;left:0;z-index:3;flex:0 0 var(--lw);background:var(--surface);border-right:1px solid var(--line);
+  padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:center}
+.row-label b{font-weight:600;font-size:14px;line-height:1.25}
+.row-label small{color:var(--muted);font-size:12px;line-height:1.3}
+.track{position:relative;flex:0 0 auto}
+.gridline{position:absolute;top:0;bottom:0;border-left:1px solid var(--line);opacity:.6}
+.todayline{position:absolute;top:0;bottom:0;border-left:2px solid var(--today);z-index:2}
+.bar{position:absolute;top:15px;height:16px;border-radius:3px;background:var(--review)}
+.bar.est{background:repeating-linear-gradient(135deg,var(--review) 0 3px,transparent 3px 6px);outline:1px dashed var(--review);outline-offset:-1px}
+.bar.ext{opacity:.35}
+.dl{position:absolute;top:12px;width:12px;height:12px;margin-left:-6px;transform:translateY(4px) rotate(45deg);background:var(--ink);border:2px solid var(--surface)}
+.cf{position:absolute;top:16px;height:14px;border-radius:7px;background:var(--c,var(--conf));min-width:14px}
+.cf.est{background:transparent;border:2px dashed var(--c,var(--conf))}
+.tag{position:absolute;top:30px;font-size:11px;color:var(--muted);white-space:nowrap}
+.row.sel .row-label{box-shadow:inset 4px 0 0 var(--ink)}
+.row.sel{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.row.rel-before .row-label{box-shadow:inset 4px 0 0 var(--before)}
+.row.rel-before .bar{background:var(--before);outline-color:var(--before)}
+.row.rel-before .bar.est{background:repeating-linear-gradient(135deg,var(--before) 0 3px,transparent 3px 6px)}
+.row.rel-after .row-label{box-shadow:inset 4px 0 0 var(--after)}
+.row.rel-after .bar{background:var(--after);outline-color:var(--after)}
+.row.rel-after .bar.est{background:repeating-linear-gradient(135deg,var(--after) 0 3px,transparent 3px 6px)}
+.row.rel-none .track,.row.rel-none .row-label{opacity:.38}
+.panel{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h2{font-size:16px;margin:0 0 4px}
+.card h3{font-size:14px;margin:0 0 8px;display:flex;gap:8px;align-items:center}
+.card p{margin:0 0 6px;color:var(--muted);font-size:14px}
+.card ul{list-style:none;margin:0;padding:0}
+.card li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px solid var(--line);font-size:14px}
+.card li:first-child{border-top:0}
+.gap{color:var(--muted);white-space:nowrap}
+.tight{color:var(--today);font-weight:600}
+.empty{color:var(--muted);font-size:14px}
+.note{margin-top:22px;color:var(--muted);font-size:13px;max-width:80ch}
+.tablewrap{overflow-x:auto;margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:820px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:13px}
+tr:last-child td{border-bottom:0}
+.e{color:var(--muted)}
+.e::before{content:"≈ "}
+@media (max-width:640px){ :root{--lw:150px} h1{font-size:23px} }
+a{color:var(--review);text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--after);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.chip{font-size:13px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Conference calendar</h1>
+  <p class="lede">Each bar is a review window, from submission deadline to decision. Pick a venue to see which earlier venues decide in time for it to cite accepted prior work, and which later venues it can feed into.</p>
+
+  <div class="controls">
+    <label class="chk"><input type="checkbox" id="showSmall" checked> Include posters and surveys</label>
+    <label class="chk"><input type="checkbox" id="waitFinal"> Wait for final decision (two-round venues)</label>
+  </div>
+
+  <div class="controls" role="group" aria-label="Show conferences by continent">
+    <label class="chk"><input type="checkbox" class="cont" value="eu" checked><i class="sw dot" style="background:var(--eu)"></i>Europe</label>
+    <label class="chk"><input type="checkbox" class="cont" value="na" checked><i class="sw dot" style="background:var(--na)"></i>North America</label>
+    <label class="chk"><input type="checkbox" class="cont" value="as" checked><i class="sw dot" style="background:var(--as)"></i>Asia</label>
+    <label class="chk"><input type="checkbox" class="cont" value="oc" checked><i class="sw dot" style="background:var(--oc)"></i>Australia</label>
+    <label class="chk"><input type="checkbox" class="cont" value="tba" checked><i class="sw dot" style="background:var(--tba)"></i>Location TBA</label>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw conf-sw"></i>Review window, confirmed</span>
+    <span><i class="sw est-sw"></i>Estimated from last year</span>
+    <span><i class="sw dot" style="border:2px dashed var(--muted)"></i>Conference dates estimated</span>
+    <span><i class="sw b"></i>Decides before selected deadline</span>
+    <span><i class="sw a"></i>Deadline after selected decision</span>
+  </div>
+
+  <div class="chart" id="chart"></div>
+  <div class="panel" id="panel"></div>
+
+  <div class="tablewrap">
+    <table id="tbl">
+      <thead><tr><th>Venue</th><th>Submission</th><th>Time left</th><th>Decision</th><th>Conference</th><th>Location</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h2 style="font-size:20px;margin:34px 0 10px">Journals</h2>
+  <div class="tablewrap" style="margin-top:0">
+    <table>
+      <thead><tr><th>Journal</th><th>Publisher</th><th>Fit</th><th>Presentation option</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://dl.acm.org/journal/tog" target="_blank" rel="noopener">ACM Transactions on Graphics (TOG)</a></td><td>ACM</td><td>Top venue, all of graphics</td><td>Present at SIGGRAPH or SIGGRAPH Asia</td></tr>
+        <tr><td><a href="https://www.computer.org/csdl/journal/tg" target="_blank" rel="noopener">IEEE Transactions on Visualization and Computer Graphics (TVCG)</a></td><td>IEEE</td><td>Graphics, VR, visualization</td><td>Journal-first talks at IEEE VR and IEEE VIS</td></tr>
+        <tr><td><a href="https://onlinelibrary.wiley.com/journal/14678659" target="_blank" rel="noopener">Computer Graphics Forum (CGF)</a></td><td>Wiley / Eurographics</td><td>All of graphics</td><td>Present at Eurographics</td></tr>
+        <tr><td><a href="https://jcgt.org/" target="_blank" rel="noopener">Journal of Computer Graphics Techniques (JCGT)</a></td><td>Open access</td><td>Practical real-time techniques, encodings, compression; code encouraged</td><td>Has had a presentation arrangement with I3D</td></tr>
+        <tr><td><a href="https://dl.acm.org/journal/pacmcgit" target="_blank" rel="noopener">Proceedings of the ACM on Computer Graphics and Interactive Techniques (PACMCGIT)</a></td><td>ACM</td><td>Journal of record for I3D, HPG and SCA</td><td>Only via those conferences</td></tr>
+        <tr><td><a href="https://www.sciencedirect.com/journal/computers-and-graphics" target="_blank" rel="noopener">Computers &amp; Graphics</a></td><td>Elsevier</td><td>Broad graphics; SMI papers; extended GI and Web3D best papers</td><td>SMI</td></tr>
+        <tr><td><a href="https://www.sciencedirect.com/journal/computer-aided-geometric-design" target="_blank" rel="noopener">Computer-Aided Geometric Design (CAGD)</a></td><td>Elsevier</td><td>Geometric modeling, curves and surfaces</td><td>GMP (special issue)</td></tr>
+        <tr><td><a href="https://www.sciencedirect.com/journal/computer-aided-design" target="_blank" rel="noopener">Computer-Aided Design (CAD)</a></td><td>Elsevier</td><td>Solid and physical modeling, CAD/CAM</td><td>SPM</td></tr>
+        <tr><td><a href="https://www.computer.org/csdl/magazine/cg" target="_blank" rel="noopener">IEEE Computer Graphics and Applications (CG&amp;A)</a></td><td>IEEE</td><td>Applied graphics, shorter articles</td><td>None by default</td></tr>
+        <tr><td><a href="https://www.sciencedirect.com/journal/graphical-models" target="_blank" rel="noopener">Graphical Models</a></td><td>Elsevier</td><td>Geometry, meshes, geometry compression</td><td>None by default</td></tr>
+        <tr><td><a href="https://link.springer.com/journal/371" target="_blank" rel="noopener">The Visual Computer</a></td><td>Springer</td><td>Broad graphics; CGI proceedings journal</td><td>CGI papers</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="note">Dates marked ≈ are estimates based on the previous year's cycle; check the official call once it appears. Gaps under 21 days are flagged as tight, since you'll want time to update the paper after a decision. If prior work is still under review when you submit, most venues (including SIGGRAPH) let you cite it anonymously and attach it as supplementary material.</p>
+</div>
+
+<script>
+const TODAY = new Date().toISOString().slice(0,10);
+const V = [
+ {id:"eg",  name:"Eurographics 2027 – Full Papers", loc:"Lucca, Italy", kind:"paper", sub:"2026-10-01", dec:"2026-12-18", fin:"2027-02-09", cs:"2027-05-10", ce:"2027-05-14", est:{}, status:"Submitted, under review"},
+ {id:"star",name:"Eurographics 2027 – STARs", loc:"Lucca, Italy", kind:"small", sub:"2026-10-19", dec:"2026-12-21", fin:"2027-02-19", cs:"2027-05-10", ce:"2027-05-14", est:{}},
+ {id:"cvpr",name:"CVPR 2027", loc:"Seattle, USA", kind:"paper", sub:"2026-11-16", dec:"2027-02-25", cs:"2027-06-20", ce:"2027-06-25", est:{}},
+ {id:"vrp", name:"IEEE VR 2027 – Posters", loc:"Melbourne, Australia", kind:"small", sub:"2026-12-07", dec:"2027-01-06", cs:"2027-02-27", ce:"2027-03-03", est:{}},
+ {id:"i3d", name:"ACM I3D 2027", loc:"TBA", kind:"paper", sub:"2027-01-08", dec:"2027-02-19", cs:"2027-05-11", ce:"2027-05-13", est:{sub:1,dec:1,conf:1}},
+ {id:"gi",  name:"Graphics Interface 2027", loc:"Winnipeg, Canada", kind:"paper", sub:"2027-01-15", dec:"2027-03-10", cs:"2027-06-15", ce:"2027-06-18", est:{sub:1,dec:1}},
+ {id:"sig", name:"SIGGRAPH 2027", loc:"Anaheim, USA", kind:"paper", sub:"2027-01-21", dec:"2027-03-31", cs:"2027-08-08", ce:"2027-08-12", est:{sub:1,dec:1}},
+ {id:"wscg",name:"WSCG 2027", loc:"Pilsen, Czechia", kind:"paper", sub:"2027-02-28", dec:"2027-04-10", cs:"2027-05-24", ce:"2027-05-27", est:{sub:1,dec:1,conf:1}},
+ {id:"cgi", name:"CGI 2027", loc:"Cairns, Australia", kind:"paper", sub:"2027-02-28", dec:"2027-04-30", cs:"2027-07-05", ce:"2027-07-08", est:{sub:1,dec:1}},
+ {id:"hpg", name:"HPG 2027", loc:"Lugano, Switzerland", kind:"paper", sub:"2027-04-09", dec:"2027-05-07", fin:"2027-05-31", cs:"2027-07-07", ce:"2027-07-09", est:{sub:1,dec:1}},
+ {id:"sca", name:"SCA 2027", loc:"TBA", kind:"paper", sub:"2027-04-09", dec:"2027-05-28", cs:"2027-07-14", ce:"2027-07-16", est:{sub:1,dec:1,conf:1}},
+ {id:"egsr",name:"EGSR 2027", loc:"Lugano, Switzerland", kind:"paper", sub:"2027-04-14", dec:"2027-05-24", cs:"2027-07-05", ce:"2027-07-07", est:{sub:1,dec:1}},
+ {id:"sa",  name:"SIGGRAPH Asia 2027", loc:"Tokyo, Japan", kind:"paper", sub:"2027-05-11", dec:"2027-08-05", cs:"2027-11-30", ce:"2027-12-03", est:{sub:1,dec:1}},
+ {id:"pg",  name:"Pacific Graphics 2027", loc:"TBA", kind:"paper", sub:"2027-06-01", dec:"2027-07-30", cs:"2027-10-12", ce:"2027-10-15", est:{sub:1,dec:1,conf:1}},
+ {id:"vmv", name:"VMV 2027", loc:"Germany, city TBA", kind:"paper", sub:"2027-06-18", dec:"2027-08-03", cs:"2027-09-21", ce:"2027-09-24", est:{sub:1,dec:1,conf:1}},
+ {id:"ismar",name:"IEEE ISMAR 2027", loc:"TBA", kind:"paper", sub:"2027-03-15", dec:"2027-06-20", cs:"2027-10-11", ce:"2027-10-15", est:{sub:1,dec:1,conf:1}},
+ {id:"3dv", name:"3DV 2028", loc:"TBA", kind:"paper", sub:"2027-08-27", dec:"2027-10-27", fin:"2027-12-02", cs:"2028-04-05", ce:"2028-04-08", est:{sub:1,dec:1,conf:1}},
+ {id:"vr28",name:"IEEE VR 2028 – Papers", loc:"TBA", kind:"paper", sub:"2027-08-30", dec:"2027-11-29", fin:"2028-01-06", cs:"2028-03-11", ce:"2028-03-15", est:{sub:1,dec:1,conf:1}},
+ {id:"griv",name:"GRIVAPP 2028", loc:"TBA", kind:"paper", sub:"2027-09-15", dec:"2027-11-15", cs:"2028-02-24", ce:"2028-02-26", est:{sub:1,dec:1,conf:1}},
+ {id:"ev",  name:"EuroVis 2027 – Full Papers", loc:"TBA", kind:"paper", sub:"2026-12-02", dec:"2027-02-11", fin:"2027-03-18", cs:"2027-06-07", ce:"2027-06-11", est:{sub:1,dec:1,conf:1}},
+ {id:"sgp1",name:"SGP 2027 – Round 1", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-01-26", dec:"2027-03-08", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"pgv", name:"EGPGV 2027", loc:"With EuroVis, TBA", kind:"paper", sub:"2027-02-05", dec:"2027-03-26", cs:"2027-06-07", ce:"2027-06-07", est:{sub:1,dec:1,conf:1}},
+ {id:"vg",  name:"VisGames 2027 (EuroVis workshop)", loc:"With EuroVis, TBA", kind:"small", sub:"2027-03-19", dec:"2027-04-30", cs:"2027-06-07", ce:"2027-06-07", est:{sub:1,dec:1,conf:1}},
+ {id:"sgp2",name:"SGP 2027 – Round 2", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-04-07", dec:"2027-05-14", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"w3d", name:"Web3D 2027", loc:"TBA", kind:"paper", sub:"2027-06-01", dec:"2027-07-05", cs:"2027-09-28", ce:"2027-09-30", est:{sub:1,dec:1,conf:1}},
+ {id:"gmp", name:"GMP 2027", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2026-12-21", dec:"2027-02-22", fin:"2027-04-26", cs:"2027-06-21", ce:"2027-06-25", est:{}},
+ {id:"spm", name:"SPM 2027 (Solid & Physical Modeling)", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-01-15", dec:"2027-03-15", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"smi", name:"SMI 2027 (Shape Modeling International)", loc:"Singapore (Geometry Summit)", kind:"paper", sub:"2027-03-01", dec:"2027-04-20", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"igsp",name:"Geometry Summit 2027 – Posters", loc:"Singapore", kind:"small", sub:"2027-05-10", dec:"2027-05-31", cs:"2027-06-21", ce:"2027-06-25", est:{sub:1,dec:1}},
+ {id:"eg28",name:"Eurographics 2028 – Full Papers", loc:"Zaragoza, Spain", kind:"paper", sub:"2027-10-01", dec:"2027-12-17", fin:"2028-02-08", cs:"2028-05-08", ce:"2028-05-12", est:{sub:1,dec:1,conf:1}},
+];
+V.sort((a,b)=>a.sub.localeCompare(b.sub));
+const URLS = {
+ eg:"https://eg2027.isti.cnr.it/", star:"https://eg2027.isti.cnr.it/call-for-stars/",
+ cvpr:"https://cvpr.thecvf.com/Conferences/2027", vrp:"https://ieeevr.org/2027/contribute/posters/",
+ ev:"https://www.eurovis.org/", i3d:"https://i3dsymposium.org/", gi:"https://conferences.graphicsinterface.org/2027",
+ sig:"https://www.siggraph.org/", sgp1:"https://sgp26.org/", sgp2:"https://sgp26.org/",
+ pgv:"https://www.egpgv.org/", wscg:"http://www.wscg.eu/", cgi:"https://www.cgs-network.org/",
+ ismar:"https://confcal.vrvis.at/conferences/ismr/", vg:"https://visgames.netlify.app/",
+ hpg:"https://www.highperformancegraphics.org/", sca:"https://computeranimation.org/",
+ egsr:"https://www.eg.org/wp/events/list/", sa:"https://asia.siggraph.org/", pg:"https://www.eg.org/wp/events/list/",
+ vmv:"https://www.gcpr-vmv.de/", w3d:"https://web3d.siggraph.org/", "3dv":"https://3dvconf.github.io/",
+ vr28:"https://ieeevr.org/", griv:"https://confcal.vrvis.at/conferences/grapp/",
+ eg28:"https://www.eg.org/wp/eurographics-annual-conference/",
+ gmp:"https://gmp-conference-2027.github.io/gmp2027/", spm:"https://gmp-conference-2027.github.io/gmp2027/", smi:"https://gmp-conference-2027.github.io/gmp2027/", igsp:"https://gmp-conference-2027.github.io/gmp2027/"
+};
+V.forEach(v => v.url = URLS[v.id]);
+const CONT = {eg:"eu",star:"eu",cvpr:"na",vrp:"oc",ev:"eu",i3d:"tba",gi:"na",sig:"na",sgp1:"as",sgp2:"as",
+ pgv:"eu",wscg:"eu",cgi:"oc",ismar:"tba",vg:"eu",hpg:"eu",sca:"tba",egsr:"eu",sa:"as",pg:"tba",vmv:"eu",
+ w3d:"tba","3dv":"tba",vr28:"tba",griv:"tba",eg28:"eu",gmp:"as",spm:"as",smi:"as",igsp:"as"};
+V.forEach(v => v.cont = CONT[v.id] || "tba");
+const KW = {
+ eg:["2027 call",["Computer graphics (all areas)","Novel methods and algorithms","Datasets and benchmarks","Perceptual and experimental studies","Rendering","Geometry processing","Animation and simulation","Generative AI and deep learning for graphics"]],
+ star:["2027 call",["State-of-the-art surveys","Taxonomies","Critical comparison of methods","Research gaps","Cross-disciplinary topics"]],
+ cvpr:["Typical scope",["Computer vision","3D reconstruction","Neural rendering","Generative models","Representation learning"]],
+ vrp:["2027 call",["Virtual reality","Augmented and mixed reality","3D user interfaces","Work in progress","Systems and applications"]],
+ ev:["2026 call",["Visualization","Visual analytics","Information visualization","Scientific visualization"]],
+ i3d:["2026 call",["Real-time 3D graphics","Rendering","Texture synthesis","Collision detection","VR interaction","Animation","Procedural content generation","Sketch-based modeling","Game techniques and game AI"]],
+ gi:["2027 call",["Computer graphics","Human-computer interaction","Information visualization"]],
+ sig:["Typical scope",["Rendering","Geometry and modeling","Animation and simulation","Imaging","VR/AR/MR","Fabrication","Haptics","Generative AI and ML for graphics"]],
+ sgp1:["2026 call",["Geometry compression","Acquisition and reconstruction","Discrete differential geometry","Meshing and remeshing","Neural shape representations","Point clouds","Parameterization and deformation","Differentiable rendering","Geometric deep learning"]],
+ pgv:["2026 call",["Parallel graphics","Parallel visualization","Very large data sets","Out-of-core processing","In situ visualization","ML for large-scale graphics","Advanced hardware"]],
+ wscg:["Typical scope",["Computer graphics","Visualization","Computer vision","Rendering techniques","Virtual reality","Image processing"]],
+ cgi:["Typical scope",["Computer graphics","Artificial intelligence","Modeling","Rendering","Animation"]],
+ ismar:["Typical scope",["Augmented reality","Mixed reality","Tracking","Displays","Perception"]],
+ vg:["2026 call",["Visualization games","Playful activities","Co-design and co-creation","Communication","Game-based evaluation"]],
+ hpg:["2026 call",["Graphics hardware and systems","Ray tracing","Mobile and low-power graphics","Physically based and inverse rendering","ML and generative AI for graphics","Point-based rendering, radiance caching","Compression and bandwidth optimization","Material and geometry representation, LOD","Programming models and compilers","Denoising, super resolution, frame generation","Perception-based optimization","VR/AR and displays"]],
+ sca:["2026 call",["Time-varying phenomena","Physics-based animation","Character and facial animation","Cloth and fluids","Learning and optimization for animation","Real-time and interactive methods","Camera control","Sound for animation"]],
+ egsr:["2026 call",["Physically based rendering, global illumination","Monte Carlo sampling and reconstruction","Real-time rendering, ray tracing, GPU algorithms","Rendering systems","Inverse and differentiable rendering","Neural and Gaussian representations","Appearance and materials"]],
+ sa:["2026 call",["Animation and simulation","Imaging","Geometry and modeling","Rendering","HCI","VR/AR/MR","Haptics","Fabrication","Visualization","Generative AI and ML for graphics"]],
+ pg:["2026 call",["Computer graphics (all areas)","Applications"]],
+ vmv:["2026 call",["Geometric modeling","Color, illumination and material modeling","Information and scientific visualization","Computer vision and image processing","Image-based modeling and rendering"]],
+ w3d:["2024–26 calls",["3D web technology","WebXR","Transmission and rendering","Content and publishing","Avatars and animation","AI-driven XR"]],
+ "3dv":["Typical scope",["3D vision","Reconstruction","Neural scene representations","3D understanding"]],
+ vr28:["2027 call",["Virtual reality","Augmented and mixed reality","3D user interfaces"]],
+ griv:["2027 call",["Computer graphics","Information visualization","Human-computer interaction"]],
+ eg28:["Typical scope",["Computer graphics (all areas)"]],
+ gmp:["2027 call",["Computational design, 3D printing","Computational geometry and topology","Discrete differential geometry","Geometric content generation","Geometric learning","Isogeometric analysis","Image-based modeling","Material modeling","CAGD foundations","Multi-resolution modeling","Shape and solid representation","Shape optimization"]],
+ spm:["Typical scope",["Solid and physical modeling","CAD/CAM","Applied algebraic and differential geometry","Computational geometry and topology"]],
+ smi:["Typical scope",["Shape modeling","Shape analysis","Geometry processing"]],
+ igsp:["2023 call",["Preliminary results","Ongoing projects","Software and systems","Applied geometry"]]
+};
+KW.sgp2 = KW.sgp1;
+V.forEach(v => v.kw = KW[v.id]);
+
+
+
+
+const START = "2026-09-15", END = "2028-06-01", PX = 2.6, DAY = 864e5;
+const d = s => new Date(s + "T00:00:00Z").getTime();
+const x = s => Math.round((d(s) - d(START)) / DAY * PX);
+const days = (a,b) => Math.round((d(b) - d(a)) / DAY);
+const fmt = s => new Date(d(s)).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+const W = x(END);
+
+let mode = "cond", selected = "eg", showSmall = true;
+const conts = new Set(["eu","na","as","oc","tba"]);
+try { const s = localStorage.getItem("vcp-sel"); if (s && V.some(v=>v.id===s)) selected = s; } catch(e){}
+
+const decOf = v => (mode === "final" && v.fin) ? v.fin : v.dec;
+
+function relation(sel, o){
+  if (o.id === sel.id) return "sel";
+  if (d(decOf(o)) <= d(sel.sub)) return "before";
+  if (d(decOf(sel)) <= d(o.sub)) return "after";
+  return "none";
+}
+
+function render(){
+  const list = V.filter(v => (showSmall || v.kind !== "small") && conts.has(v.cont));
+  if (!list.length){ document.getElementById("chart").innerHTML = '<p class="empty" style="padding:16px">No venues match the selected continents.</p>'; document.getElementById("panel").innerHTML=""; document.querySelector("#tbl tbody").innerHTML=""; return; }
+  if (!list.some(v=>v.id===selected)) selected = list[0].id;
+  const sel = V.find(v=>v.id===selected);
+  const chart = document.getElementById("chart");
+  const lw = getComputedStyle(document.documentElement).getPropertyValue("--lw").trim() || "230px";
+
+  let months = "";
+  const s = new Date(d(START)); s.setUTCDate(1); s.setUTCMonth(s.getUTCMonth()+1);
+  const gl = [];
+  while (s.getTime() < d(END)){
+    const iso = s.toISOString().slice(0,10);
+    const lab = s.toLocaleDateString("en-GB",{month:"short",timeZone:"UTC"}) + (s.getUTCMonth()===0 ? " " + s.getUTCFullYear() : "");
+    months += `<div class="month" style="left:${x(iso)}px">${lab}</div>`;
+    gl.push(x(iso));
+    s.setUTCMonth(s.getUTCMonth()+1);
+  }
+  const grid = gl.map(p=>`<div class="gridline" style="left:${p}px"></div>`).join("") + `<div class="todayline" style="left:${x(TODAY)}px" title="Today"></div>`;
+
+  let rows = "";
+  for (const v of list){
+    const r = relation(sel, v);
+    const e = v.est;
+    let t = grid;
+    t += `<div class="bar ${e.dec?'est':''}" style="left:${x(v.sub)}px;width:${Math.max(4,x(v.dec)-x(v.sub))}px" title="Review: ${fmt(v.sub)} → ${fmt(v.dec)}"></div>`;
+    if (v.fin) t += `<div class="bar ext ${e.dec?'est':''}" style="left:${x(v.dec)}px;width:${x(v.fin)-x(v.dec)}px" title="Second round until final decision ${fmt(v.fin)}"></div>`;
+    t += `<div class="dl" style="left:${x(v.sub)}px" title="Deadline ${fmt(v.sub)}"></div>`;
+    t += `<div class="cf ${e.conf?'est':''}" style="--c:var(--${v.cont});left:${x(v.cs)}px;width:${Math.max(14,x(v.ce)-x(v.cs))}px" title="Conference ${fmt(v.cs)}, ${v.loc}"></div>`;
+    t += `<div class="tag" style="left:${x(v.sub)+8}px">${e.sub?'≈ ':''}${fmt(v.sub).replace(/ \d{4}$/,'')}</div>`;
+    t += `<div class="tag" style="left:${x(v.cs)}px">${v.loc}</div>`;
+    rows += `<div class="row rel-${r==='sel'?'x':r} ${r==='sel'?'sel':''}">
+      <div class="row-label" tabindex="0" role="button" data-id="${v.id}" aria-pressed="${r==='sel'}">
+        <b>${v.name}</b><small>${v.status ? v.status : (e.sub ? "Estimated dates" : "Confirmed dates")}</small>
+      </div>
+      <div class="track" style="width:${W}px">${t}</div></div>`;
+  }
+  chart.innerHTML = `<div class="grid" style="--lw:${lw};width:calc(${lw} + ${W}px)">
+    <div class="hdr"><div class="corner">Venue</div><div class="months" style="width:${W}px">${months}</div></div>${rows}</div>`;
+
+  chart.querySelectorAll(".row-label").forEach(el=>{
+    const pick = ()=>{ selected = el.dataset.id; try{localStorage.setItem("vcp-sel",selected)}catch(e){} render(); };
+    el.addEventListener("click", pick);
+    el.addEventListener("keydown", ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();pick();} });
+  });
+
+  // panel
+  const before = list.filter(o=>relation(sel,o)==="before").map(o=>({o,g:days(decOf(o),sel.sub)})).sort((a,b)=>a.g-b.g);
+  const after  = list.filter(o=>relation(sel,o)==="after").map(o=>({o,g:days(decOf(sel),o.sub)})).sort((a,b)=>a.g-b.g);
+  const clash  = list.filter(o=>relation(sel,o)==="none");
+  const li = (arr) => arr.length ? `<ul>${arr.map(({o,g})=>`<li><span>${o.name}</span><span class="gap ${g<21?'tight':''}">${g} days${g<21?' · tight':''}</span></li>`).join("")}</ul>` : `<p class="empty">None in this window.</p>`;
+  const decLabel = (mode==="final" && sel.fin) ? "final decision" : (sel.fin ? "conditional decision" : "decision");
+  document.getElementById("panel").innerHTML = `
+    <div class="card"><h2>${sel.name}</h2><p><a href="${sel.url}" target="_blank" rel="noopener">Open website</a></p>
+      <p>Deadline ${sel.est.sub?'≈ ':''}${fmt(sel.sub)}. ${decLabel[0].toUpperCase()+decLabel.slice(1)} ${sel.est.dec?'≈ ':''}${fmt(decOf(sel))}.</p>
+      <p>Conference ${sel.est.conf?'≈ ':''}${fmt(sel.cs)}, ${sel.loc}.</p>
+      ${sel.kw?`<div class="chips">${sel.kw[1].map(k=>`<span class="chip">${k}</span>`).join("")}</div><p style="font-size:12px">Topics from: ${sel.kw[0]}</p>`:""}
+      ${clash.length?`<p>Review overlaps with: ${clash.map(o=>o.name).join(", ")}. Work in one can't rely on an accepted paper in the other.</p>`:""}
+    </div>`;
+
+  // table
+  const gapTxt = (a,b) => { const n = days(a,b); return `${n} d · ${(n/7).toFixed(1)} wk · ${(n/30.44).toFixed(1)} mo`; };
+  document.querySelector("#tbl tbody").innerHTML = list.map((v,i)=>`<tr>
+    <td><a href="${v.url}" target="_blank" rel="noopener">${v.name}</a>${v.status?` <span class="e" style="font-size:12px">(${v.status.toLowerCase()})</span>`.replace('class="e"','style="color:var(--muted)"'):''}</td>
+    <td class="${v.est.sub?'e':''}">${fmt(v.sub)}</td>
+    <td class="${v.est.sub&&days(TODAY,v.sub)>=0?'e':''}" style="white-space:nowrap">${days(TODAY,v.sub)<0?'Deadline passed':gapTxt(TODAY,v.sub)}</td>
+    <td class="${v.est.dec?'e':''}">${fmt(v.dec)}${v.fin?`; final ${fmt(v.fin)}`:''}</td>
+    <td class="${v.est.conf?'e':''}">${fmt(v.cs)} – ${fmt(v.ce)}</td>
+    <td>${v.loc}</td></tr>`).join("");
+
+  // keep selected row near view horizontally on first render
+  if (!render.done){ chart.scrollLeft = Math.max(0, x(TODAY) - 40); render.done = true; }
+}
+
+document.getElementById("showSmall").addEventListener("change", e=>{ showSmall = e.target.checked; render(); });
+document.querySelectorAll("input.cont").forEach(c=>c.addEventListener("change",()=>{ c.checked ? conts.add(c.value) : conts.delete(c.value); render(); }));
+document.getElementById("waitFinal").addEventListener("change", e=>{ mode = e.target.checked ? "final" : "cond"; render(); });
+render();
+</script>
+</body>
+</html>

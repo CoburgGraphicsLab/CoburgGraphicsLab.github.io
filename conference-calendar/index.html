@@ -27,7 +27,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
-.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 48px}
+.wrap{max-width:none;margin:0 auto;padding:28px 24px 48px}
 h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
 .lede{color:var(--muted);margin:0 0 20px;max-width:70ch}
 .controls{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;margin-bottom:14px}
@@ -253,12 +253,13 @@ V.forEach(v => v.kw = KW[v.id]);
 
 
 
-const START = "2026-09-15", END = "2028-06-01", PX = 2.6, DAY = 864e5;
+const START = "2026-09-15", END = "2028-06-01", DAY = 864e5;
+let PX = 2.6;
 const d = s => new Date(s + "T00:00:00Z").getTime();
 const x = s => Math.round((d(s) - d(START)) / DAY * PX);
 const days = (a,b) => Math.round((d(b) - d(a)) / DAY);
 const fmt = s => new Date(d(s)).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
-const W = x(END);
+let W = x(END);
 
 let mode = "cond", selected = "eg", showSmall = true;
 const conts = new Set(["eu","na","as","oc","tba"]);
@@ -280,6 +281,10 @@ function render(){
   const sel = V.find(v=>v.id===selected);
   const chart = document.getElementById("chart");
   const lw = getComputedStyle(document.documentElement).getPropertyValue("--lw").trim() || "230px";
+  // scale so that one full year fits in the visible chart width
+  const avail = chart.clientWidth - (parseInt(lw,10) || 230) - 4;
+  PX = Math.max(1.6, avail / 366);
+  W = x(END);
 
   let months = "";
   const s = new Date(d(START)); s.setUTCDate(1); s.setUTCMonth(s.getUTCMonth()+1);
@@ -350,6 +355,7 @@ function render(){
 document.getElementById("showSmall").addEventListener("change", e=>{ showSmall = e.target.checked; render(); });
 document.querySelectorAll("input.cont").forEach(c=>c.addEventListener("change",()=>{ c.checked ? conts.add(c.value) : conts.delete(c.value); render(); }));
 document.getElementById("waitFinal").addEventListener("change", e=>{ mode = e.target.checked ? "final" : "cond"; render(); });
+let rz; window.addEventListener("resize", ()=>{ clearTimeout(rz); rz = setTimeout(()=>{ render.done=false; render(); }, 150); });
 render();
 </script>
 </body>
